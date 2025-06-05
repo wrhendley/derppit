@@ -1,5 +1,5 @@
-{% {% extends "base.html" %}%}
-{% {% block content %}
+{% extends "base.html" %}
+{% block content %}
 <div class="container">
     <h1>Welcome to the Homepage</h1>
     {% for post in posts %}
@@ -13,4 +13,4 @@
     {% empty %}
         <p>No posts available.</p>
     {% endfor %}    
-{% endblock %}%}
+{% endblock %}
