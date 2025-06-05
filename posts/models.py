@@ -1,8 +1,9 @@
 from django.db import models
+from users.models import User
 
 class Post(models.Model):
-    # user_id = models.IntegerField()
-    # subderppit_id = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # subderppit = models.ForeignKey('Subderppit', on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=200)
     content = models.TextField()
     upvotes = models.IntegerField(default=0)
@@ -14,7 +15,7 @@ class Post(models.Model):
         return self.title
 
 class Comment(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     parent_comment = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
     content = models.TextField()
