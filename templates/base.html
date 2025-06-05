@@ -8,20 +8,15 @@
     {% bootstrap_css %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'posts:post_list' %}">Derppit</a>
-        </div>
-    </nav>
+
+    {% {% include "partials/navbar.html" %}%}
 
     <main class="container mt-4">
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer class="text-center mt-4">
-        <p>&copy; 2025 Derppit. All rights reserved.</p>
-    </footer>
+    {% include "partials/footer.html" %}
 
     {% bootstrap_javascript %}
 </body>
