@@ -6,7 +6,7 @@
             <span class="ms-auto">Logged in as {{ user.username }}</span>
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline-danger">Log out</button>
+                <button type="submit" class="btn btn-outline-danger ms-3">Log out</button>
             </form>
             {% comment %} <a class="btn btn-outline-danger ms-2" href="{% url 'logout' %}">Log out</a> {% endcomment %}
         {% else %}
