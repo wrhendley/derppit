@@ -1,5 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.views.generic import CreateView
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 
-def index(request):
-    return HttpResponse("Welcome to Derppit Users!")
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'auth/signup.html'
+    success_url = reverse_lazy('login')
