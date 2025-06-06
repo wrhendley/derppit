@@ -3,7 +3,7 @@ from users.models import User
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # subderppit = models.ForeignKey('Subderppit', on_delete=models.CASCADE, related_name='posts')
+    subderppit = models.ForeignKey('Subderppit', on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=200)
     content = models.TextField()
     upvotes = models.IntegerField(default=0)
