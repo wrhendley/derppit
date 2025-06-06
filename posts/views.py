@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
@@ -11,18 +9,16 @@ from .forms import PostForm, SubderppitForm
 def post_list(request):
     return render(request, 'posts/homepage.html')
 
-def create_post(request):
-    return render(request, 'posts/create_post.html')
-
-def create_subderppit(request):
-    return render(request, 'posts/create_subderppit.html')
-
 @method_decorator(login_required, name='dispatch')
 class CreateSubderppitView(CreateView):
     model = Subderppit
     form_class = SubderppitForm
-    template_name = 'create_subderppit.html'
+    template_name = 'posts/create_subderppit.html'
     success_url = reverse_lazy('post_list')
+    
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
 
 @method_decorator(login_required, name='dispatch')
 class CreatePostView(CreateView):
@@ -30,3 +26,7 @@ class CreatePostView(CreateView):
     form_class = PostForm
     template_name = 'posts/create_post.html'
     success_url = reverse_lazy('post_list')
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
