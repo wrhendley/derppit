@@ -4,4 +4,29 @@
     <h1>{{ post.title }}</h1>
     <p>by {{ post.author.username }} on {{ post.created_at|date:"F j, Y" }}</p>
     <p>{{ post.content }}</p>
+
+    <hr>
+
+    <h4>Comments</h4>
+    {% for comment in comments %}
+        <div>
+            <strong>{{ comment.author.username }}:</strong>
+            <p>{{ comment.content }}</p>
+        </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
+    <hr>
+
+    <h4>Leave a Comment</h4>
+    <form method="post" action="{% url 'add_comment' post.id %}">
+        {% if user.is_authenticated %}
+            <input type="hidden" name="author" value="{{ user.id }}">
+        {% else %}
+            <p>You must be logged in to comment.</p>
+        {% endif %}
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
 {% endblock %}

@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView
 from django.urls import reverse_lazy
 from .models import Post, Subderppit
-from .forms import PostForm, SubderppitForm
+from .forms import PostForm, SubderppitForm, CommentForm
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_at')
@@ -36,3 +36,20 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'posts/post_detail.html'
     context_object_name = 'post'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CommentForm()
+        context['comments'] = self.object.comments.all().order_by('-created_at')
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = self.object
+            comment.author = request.user
+            comment.save()
+            return redirect('post_detail', pk=self.object.pk)
+        return self.render_to_response(self.get_context_data(form=form))
