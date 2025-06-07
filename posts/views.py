@@ -49,7 +49,7 @@ class PostDetailView(DetailView):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = self.object
-            comment.author = request.user
+            comment.user = request.user
             comment.save()
             return redirect('post_detail', pk=self.object.pk)
         return self.render_to_response(self.get_context_data(form=form))
