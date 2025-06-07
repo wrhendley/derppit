@@ -3,12 +3,13 @@
     <div class="container">
         <a class="navbar-brand" href="{% url 'post_list' %}">Derppit</a>
         {% if user.is_authenticated %}
-            <span class="ms-auto">Logged in as {{ user.username }}</span>
+            <span class="ms-auto me-3">Logged in as {{ user.username }}</span>
+            <a class="btn btn-outline-success me-2" href="{% url 'create_subderppit' %}">New Subderppit</a>
+            <a class="btn btn-outline-primary me-2" href="{% url 'create_post' %}">New Post</a>
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline-danger ms-3">Log out</button>
+                <button type="submit" class="btn btn-outline-danger">Log out</button>
             </form>
-            {% comment %} <a class="btn btn-outline-danger ms-2" href="{% url 'logout' %}">Log out</a> {% endcomment %}
         {% else %}
             <a class="btn btn-outline-primary ms-auto" href="{% url 'login' %}">Login</a>
         {% endif %}

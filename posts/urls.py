@@ -1,6 +1,9 @@
 from django.urls import path
-from . import views
+from .views import CreateSubderppitView, CreatePostView, post_list, PostDetailView
 
 urlpatterns = [
-    path('', views.post_list, name='post_list'),
+    path('', post_list, name='post_list'),
+    path('posts/create/', CreatePostView.as_view(), name='create_post'),
+    path('posts/create_subderppit/', CreateSubderppitView.as_view(), name='create_subderppit'),
+    path('posts/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
 ]
