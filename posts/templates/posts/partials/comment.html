@@ -1,0 +1,30 @@
+<div class="comment ms-3 border p-3 mb-2 bg-light">
+    <p><strong>{{ comment.user.username }}</strong>
+        <span class="text-muted">{{ comment.created_at|date:"F j, Y, g:i a" }}</span>
+    </p>
+    {% if comment.should_show_updated %}
+        <span class="text-muted">Updated on {{ comment.updated_at|date:"F j, Y, g:i a" }}</span>
+    {% endif %}
+    
+    {% if comment.updated_at %}
+    {% endif %}
+    
+    {% if comment.is_deleted %}
+        <p class="text-danger">This comment has been deleted.</p>
+    {% endif %}
+    <p>{{ comment.content }}</p>
+
+    <a href="javascript:void(0)" onclick="toggleReplyForm({{ comment.id }})">Reply</a>
+    <div id="reply-form-{{ comment.id }}" style="display: none;">
+        <form method="post" action="{% url 'post_detail' post.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="parent_comment_id" value="{{ comment.id }}">
+            <button type="submit">Submit Reply</button>
+        </form>
+    </div>
+
+    {% for reply in comment.replies.all %}
+        {% include "posts/partials/comment.html" with comment=reply %}
+    {% endfor %}
+</div>

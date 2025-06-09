@@ -9,20 +9,9 @@
 
     <h4>Comments</h4>
     {% for comment in comments %}
-        <div>
-            <strong>{{ comment.user.username }}:</strong>
-            <p>{{ comment.content|linebreaksbr }}</p>
-
-            <a href="#" onclick="event.preventDefault(); toggleReplyForm({{ comment.id }});">Reply</a>
-
-            <div id="reply-form-{{ comment.id }}" style="display: none;" class="mt-2">
-                <form method="post" actio="{% url 'reply_to_comment' post.pk comment.id %}">
-                    {% csrf_token %}
-                    {{ form.as_p}}
-                    <button type="submit" class="btn btn-sm btn-outline-primary">Reply</button>
-                </form>
-            </div>
-        </div>
+        {% if not comment.parent_comment %}
+            {% include "posts/partials/comment.html" with comment=comment %}
+        {% endif %}
     {% empty %}
         <p>No comments yet.</p>
     {% endfor %}

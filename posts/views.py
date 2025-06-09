@@ -51,6 +51,9 @@ class PostDetailView(DetailView):
             comment = form.save(commit=False)
             comment.post = self.object
             comment.user = request.user
+            parent_id = request.POST.get('parent_comment_id')
+            if parent_id:
+                comment.parent_comment_id = parent_id
             comment.save()
             return redirect('post_detail', pk=self.object.pk)
         return self.render_to_response(self.get_context_data(form=form))
