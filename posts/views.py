@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView
+from django.views import View
 from django.urls import reverse_lazy
-from .models import Post, Subderppit
+from .models import Post, Subderppit, Comment
 from .forms import PostForm, SubderppitForm, CommentForm
 
 def post_list(request):
@@ -53,3 +54,16 @@ class PostDetailView(DetailView):
             comment.save()
             return redirect('post_detail', pk=self.object.pk)
         return self.render_to_response(self.get_context_data(form=form))
+
+class ReplyToCommentView(View):
+    def post(self, request, pk, parent_id):
+        post = get_object_or_404(Post, pk=pk)
+        parent_comment = get_object_or_404(Comment, pk=parent_id)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.user = request.user
+            reply.post = post
+            reply.parent = parent_comment
+            reply.save()
+        return redirect('post_detail', pk=pk)
