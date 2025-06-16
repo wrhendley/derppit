@@ -1,9 +1,10 @@
 from django.db import models
 from users.models import User
+from datetime import timedelta
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # subderppit = models.ForeignKey('Subderppit', on_delete=models.CASCADE, related_name='posts')
+    subderppit = models.ForeignKey('Subderppit', on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=200)
     content = models.TextField()
     upvotes = models.IntegerField(default=0)
@@ -26,3 +27,22 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment on {self.post.title}' if self.post else 'Comment'
+    
+    def should_show_updated(self):
+        if not self.updated_at or not self.created_at:
+            return False
+        return (self.updated_at - self.created_at) >= timedelta(minutes=5)
+
+class Subderppit(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subderppits_created')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Subderppits'

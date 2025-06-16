@@ -1,0 +1,23 @@
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Derppit{% endblock %}</title>
+    {% bootstrap_css %}
+</head>
+<body>
+
+    {% include "partials/navbar.html" %}
+
+    <main class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include "partials/footer.html" %}
+
+    {% bootstrap_javascript %}
+</body>
+</html>
